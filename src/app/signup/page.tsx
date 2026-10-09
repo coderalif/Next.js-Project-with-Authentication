@@ -48,9 +48,11 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">নাম</label>
+            <label htmlFor="signup-name" className="mb-2 block text-sm font-medium text-slate-700">নাম</label>
             <input
+              id="signup-name"
               type="text"
+              autoComplete="name"
               value={name}
               onChange={(event) => setName(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"
@@ -60,9 +62,11 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">ইমেল</label>
+            <label htmlFor="signup-email" className="mb-2 block text-sm font-medium text-slate-700">ইমেল</label>
             <input
+              id="signup-email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"
@@ -72,9 +76,11 @@ export default function SignUpPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">পাসওয়ার্ড</label>
+            <label htmlFor="signup-password" className="mb-2 block text-sm font-medium text-slate-700">পাসওয়ার্ড</label>
             <input
+              id="signup-password"
               type="password"
+              autoComplete="new-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"

@@ -48,9 +48,11 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">ইমেল</label>
+            <label htmlFor="signin-email" className="mb-2 block text-sm font-medium text-slate-700">ইমেল</label>
             <input
+              id="signin-email"
               type="email"
+              autoComplete="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"
@@ -60,9 +62,11 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700">পাসওয়ার্ড</label>
+            <label htmlFor="signin-password" className="mb-2 block text-sm font-medium text-slate-700">পাসওয়ার্ড</label>
             <input
+              id="signin-password"
               type="password"
+              autoComplete="current-password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"
