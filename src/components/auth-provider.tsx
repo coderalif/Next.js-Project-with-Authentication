@@ -28,9 +28,12 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const session = authClient.useSession();
-  const user = session.data?.user
-    ? { name: session.data.user.name, email: session.data.user.email }
-    : null;
+  const user = useMemo(() => {
+    const sessionUser = session.data?.user;
+    return sessionUser
+      ? { name: sessionUser.name, email: sessionUser.email }
+      : null;
+  }, [session.data?.user]);
 
   const value = useMemo<AuthContextValue>(
     () => ({

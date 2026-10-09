@@ -1,4 +1,3 @@
-roject ta tik kopro
 import Link from "next/link";
 
 import { formatPercent, formatPrice, type Product } from "@/data/products";

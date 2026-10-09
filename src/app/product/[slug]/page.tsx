@@ -40,18 +40,10 @@ export default function ProductDetailsPage() {
     return { min, max, average };
   }, [product]);
 
-  if (authLoading || (!isLoggedIn && !notified.current)) {
+  if (authLoading || !isLoggedIn) {
     return (
       <div className="mx-auto max-w-6xl animate-pulse px-4 py-16">
         <div className="h-72 rounded-3xl bg-slate-200" />
-      </div>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <p className="text-slate-600">সাইন ইন পেজে নেওয়া হচ্ছে…</p>
       </div>
     );
   }
