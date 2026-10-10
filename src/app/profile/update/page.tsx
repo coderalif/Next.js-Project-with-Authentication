@@ -70,7 +70,7 @@ function ProfileNameForm({
   return (
     <div className="mx-auto max-w-2xl px-4 py-16">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <Link href="/profile" className="text-sm font-semibold text-orange-700 hover:underline">
+        <Link href="/profile" className="text-sm font-semibold text-emerald-700 hover:underline">
           ← প্রোফাইলে ফিরে যান
         </Link>
         <h1 className="mt-5 text-3xl font-black text-slate-900">তথ্য আপডেট করুন</h1>
@@ -84,7 +84,7 @@ function ProfileNameForm({
               type="text"
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-orange-500"
+              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-emerald-500"
               minLength={2}
               required
             />
@@ -92,7 +92,7 @@ function ProfileNameForm({
           <button
             type="submit"
             disabled={pending}
-            className="rounded-xl bg-orange-600 px-5 py-3 font-semibold text-white hover:bg-orange-500 disabled:cursor-wait disabled:opacity-60"
+            className="rounded-xl bg-emerald-600 px-5 py-3 font-semibold text-white hover:bg-emerald-500 disabled:cursor-wait disabled:opacity-60"
           >
             {pending ? "আপডেট হচ্ছে…" : "তথ্য আপডেট করুন"}
           </button>

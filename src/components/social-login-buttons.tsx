@@ -38,14 +38,14 @@ export function SocialLoginButtons() {
         <button
           type="button"
           onClick={() => void signIn("google")}
-          className="rounded-xl border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          className="rounded-xl border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-[#f1f6f1]"
         >
           Google
         </button>
         <button
           type="button"
           onClick={() => void signIn("github")}
-          className="rounded-xl border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+          className="rounded-xl border border-slate-300 px-3 py-3 text-sm font-semibold text-slate-700 hover:bg-[#f1f6f1]"
         >
           GitHub
         </button>

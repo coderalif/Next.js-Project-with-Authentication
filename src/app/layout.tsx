@@ -14,10 +14,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="bn">
-      <body className="min-h-screen bg-slate-50 text-slate-900 antialiased">
+      <body className="min-h-screen bg-[#f1f6f1] text-slate-900 antialiased">
         <AuthProvider>
           <MarketDataProvider>
-            <div className="min-h-screen bg-slate-50">
+            <div className="min-h-screen bg-[#f1f6f1]">
               <Navbar />
               <main className="min-h-[70vh]">{children}</main>
               <Footer />

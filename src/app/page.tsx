@@ -36,14 +36,14 @@ export default function HomePage() {
         </div>
       ) : null}
 
-      <section className="mx-auto max-w-6xl px-4 pb-10">
+      <section className="mx-auto max-w-6xl px-4 pb-9">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-3xl font-black text-slate-900">আজ দাম বেড়েছে ▲</h2>
+          <h2 className="text-2xl font-black text-slate-900">▲ আজ দাম বেড়েছে</h2>
         </div>
         {loading ? (
           <ProductGridSkeleton />
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {topRisers.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -51,14 +51,14 @@ export default function HomePage() {
         )}
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 pb-10">
+      <section className="mx-auto max-w-6xl px-4 pb-9">
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-3xl font-black text-slate-900">আজ দাম কমেছে ▼</h2>
+          <h2 className="text-2xl font-black text-slate-900">▼ আজ দাম কমেছে</h2>
         </div>
         {loading ? (
           <ProductGridSkeleton />
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {topFallers.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
@@ -72,7 +72,7 @@ export default function HomePage() {
       >
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-3xl font-black text-slate-900">সব পণ্য</h2>
+            <h2 className="text-2xl font-black text-slate-900">সব পণ্য</h2>
             <p className="mt-1 text-slate-500">নির্বাচিত পণ্যের বাজারদর দেখে নিন</p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export default function HomePage() {
         {loading ? (
           <ProductGridSkeleton count={9} />
         ) : (
-          <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}

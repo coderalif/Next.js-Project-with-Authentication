@@ -66,7 +66,7 @@ export default function ProductDetails() {
         <button
           type="button"
           onClick={refresh}
-          className="mt-6 rounded-full bg-orange-600 px-5 py-3 font-semibold text-white"
+          className="mt-6 rounded-full bg-emerald-600 px-5 py-3 font-semibold text-white"
         >
           আবার চেষ্টা করুন
         </button>
@@ -77,13 +77,13 @@ export default function ProductDetails() {
   if (!product) {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 text-center">
-        <p className="text-sm font-semibold text-orange-700">৪০৪ — পণ্য পাওয়া যায়নি</p>
+        <p className="text-sm font-semibold text-emerald-700">৪০৪ — পণ্য পাওয়া যায়নি</p>
         <h1 className="mt-3 text-3xl font-black text-slate-900">
           এই পণ্যের তথ্য আর পাওয়া যাচ্ছে না।
         </h1>
         <Link
           href="/"
-          className="mt-6 inline-block rounded-full bg-orange-600 px-5 py-3 font-semibold text-white"
+          className="mt-6 inline-block rounded-full bg-emerald-600 px-5 py-3 font-semibold text-white"
         >
           হোম পেজে ফিরে যান
         </Link>
@@ -93,17 +93,19 @@ export default function ProductDetails() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-      <Link href="/" className="text-sm font-semibold text-orange-700 hover:underline">
-        ← সব পণ্যে ফিরে যান
-      </Link>
+      <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-2 text-sm text-slate-500">
+        <Link href="/" className="hover:text-emerald-800">???</Link><span aria-hidden="true">?</span>
+        <Link href={`/category/${product.category}`} className="hover:text-emerald-800">{product.categoryLabel}</Link><span aria-hidden="true">?</span>
+        <span className="text-slate-700">{product.name}</span>
+      </nav>
 
-      <section className="mt-5 rounded-3xl border border-orange-100 bg-gradient-to-br from-orange-50 to-white p-6 md:p-10">
+      <section className="mt-5 rounded-3xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-6 md:p-10">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
           <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-3xl bg-white text-6xl shadow-sm">
             {product.emoji}
           </div>
           <div>
-            <p className="text-sm font-semibold text-orange-700">{product.categoryLabel}</p>
+            <p className="text-sm font-semibold text-emerald-700">{product.categoryLabel}</p>
             <h1 className="mt-2 text-3xl font-black text-slate-900 md:text-4xl">
               {product.name}
             </h1>
@@ -150,24 +152,25 @@ export default function ProductDetails() {
             বিভিন্ন বাজারে পণ্যটির সর্বনিম্ন ও সর্বোচ্চ বিক্রয়মূল্য
           </p>
         </div>
-        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
-          <div className="grid grid-cols-[1fr_auto_auto] gap-4 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-600 sm:grid-cols-[1.4fr_1fr_1fr_1fr]">
-            <span>বাজার</span>
-            <span>সর্বনিম্ন</span>
-            <span>সর্বোচ্চ</span>
-            <span className="hidden sm:block">বিভাগ</span>
-          </div>
-          {product.markets.map((market) => (
-            <div
-              key={`${market.market}-${market.division}`}
-              className="grid grid-cols-[1fr_auto_auto] gap-4 border-t border-slate-100 px-4 py-4 text-sm sm:grid-cols-[1.4fr_1fr_1fr_1fr]"
-            >
-              <span className="font-medium text-slate-800">{market.market}</span>
-              <span className="text-slate-700">{formatPrice(market.min)} টাকা</span>
-              <span className="text-slate-700">{formatPrice(market.max)} টাকা</span>
-              <span className="hidden text-slate-500 sm:block">{market.division}</span>
-            </div>
-          ))}
+        <div className="overflow-x-auto rounded-2xl border border-[#dce7dd] bg-[#fbfdfb]">
+          <table className="w-full min-w-[680px] border-collapse text-left text-sm">
+            <thead className="bg-[#f0f6f0] text-slate-600"><tr>
+              <th scope="col" className="px-4 py-3 font-semibold">?????</th>
+              <th scope="col" className="px-4 py-3 font-semibold">?????</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">?????????</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">????????</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">???</th>
+            </tr></thead>
+            <tbody>{product.markets.map((market) => (
+              <tr key={`${market.market}-${market.division}`} className="border-t border-[#e3ebe3] odd:bg-[#fbfdfb] even:bg-[#f4f8f4]">
+                <th scope="row" className="px-4 py-3.5 font-medium text-slate-800">{market.market}</th>
+                <td className="px-4 py-3.5 text-slate-600">{market.division}</td>
+                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.min)} ????</td>
+                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.max)} ????</td>
+                <td className="px-4 py-3.5 text-right font-semibold text-slate-800">{formatPrice((market.min + market.max) / 2)} ????</td>
+              </tr>
+            ))}</tbody>
+          </table>
         </div>
       </section>
 
