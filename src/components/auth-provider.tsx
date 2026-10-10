@@ -80,7 +80,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (result.error.status >= 500) {
             return `অ্যাকাউন্ট তৈরি সার্ভারে ব্যর্থ হয়েছে (HTTP ${result.error.status})। Production database ও auth configuration যাচাই করুন।`;
           }
-          return result.error.message;
+          return (
+            result.error.message ??
+            "অ্যাকাউন্ট তৈরি করা যায়নি। আবার চেষ্টা করুন।"
+          );
         } catch {
           return "রেজিস্ট্রেশন সার্ভারে সংযোগ করা যায়নি।";
         }

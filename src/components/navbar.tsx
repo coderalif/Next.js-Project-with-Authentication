@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -8,23 +8,36 @@ import { useAuth } from "@/components/auth-provider";
 import { useMarketData } from "@/components/market-data-provider";
 import { formatPercent, formatPrice } from "@/data/products";
 
+const dateFormatter = new Intl.DateTimeFormat("bn-BD", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+  timeZone: "Asia/Dhaka",
+});
+
+function subscribeToDate() {
+  return () => {};
+}
+
+function getCurrentDate() {
+  return dateFormatter.format(new Date());
+}
+
+function getServerDate() {
+  return "";
+}
+
 function NavbarContent() {
   const { user, isLoggedIn, logout, loading: authLoading } = useAuth();
   const { categories, products } = useMarketData();
   const pathname = usePathname();
   const tickerItems = products.slice(0, 8);
-  const [currentDate, setCurrentDate] = useState("");
+  const currentDate = useSyncExternalStore(
+    subscribeToDate,
+    getCurrentDate,
+    getServerDate,
+  );
   const [menuOpen, setMenuOpen] = useState(false);
-
-  useEffect(() => {
-    const formattedDate = new Intl.DateTimeFormat("bn-BD", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      timeZone: "Asia/Dhaka",
-    }).format(new Date());
-    setCurrentDate(formattedDate);
-  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#dce6dc] bg-[#f9fcf9]/95 backdrop-blur">
