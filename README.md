@@ -48,7 +48,7 @@ node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"
 | `BETTER_AUTH_SECRET` | Better Auth session/signing secret; deployment-এ অবশ্যই শক্তিশালী random secret দিন |
 | `BETTER_AUTH_URL` | অ্যাপের মূল URL; যেমন `http://localhost:3000` |
 | `NEXT_PUBLIC_APP_URL` | ঐচ্ছিক public app URL |
-| `DATABASE_URL` | ঐচ্ছিক PostgreSQL connection string; না দিলে SQLite ব্যবহার হয় |
+| `DATABASE_URL` | স্থানীয় কাজে ঐচ্ছিক; Vercel/serverless deployment-এ persistent PostgreSQL connection string আবশ্যক |
 | `BETTER_AUTH_DB_PATH` | ঐচ্ছিক SQLite database path |
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | ঐচ্ছিক Google OAuth credentials |
 | `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` | ঐচ্ছিক GitHub OAuth credentials |
@@ -57,7 +57,7 @@ node -e "console.log(require('node:crypto').randomBytes(32).toString('base64'))"
 `<BETTER_AUTH_URL>/api/auth/callback/google` এবং
 `<BETTER_AUTH_URL>/api/auth/callback/github` যোগ করুন। সংশ্লিষ্ট credentials না দিলে email/password authentication চালু থাকবে, কিন্তু social provider সক্রিয় হবে না।
 
-Vercel বা অন্য serverless deployment-এ local SQLite filesystem স্থায়ী নয়—সেখানে managed PostgreSQL-সহ `DATABASE_URL` configure করুন। Deployment domain-এ `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, database schema migration এবং OAuth callback URL-গুলো production domain-এ সেট না করলে auth/deep-link flow কাজ করবে না।
+Vercel বা অন্য serverless deployment-এ local SQLite filesystem স্থায়ী নয়—সেখানে managed PostgreSQL-সহ `DATABASE_URL` configure করুন। Production environment variables যোগ করার পর একই `DATABASE_URL` দিয়ে `npm run auth:migrate` একবার চালিয়ে Better Auth-এর tables তৈরি করুন। Deployment domain-এ `BETTER_AUTH_URL`, `NEXT_PUBLIC_APP_URL`, `BETTER_AUTH_SECRET` এবং database schema migration ঠিক না থাকলে auth/deep-link flow কাজ করবে না। লোকাল SQLite-এ তৈরি user production PostgreSQL-এ স্বয়ংক্রিয়ভাবে থাকবে না; production-এ নতুন account তৈরি করুন।
 
 ## যাচাই
 
