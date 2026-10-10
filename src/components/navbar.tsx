@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { useAuth } from "@/components/auth-provider";
 import { useMarketData } from "@/components/market-data-provider";
@@ -12,12 +13,21 @@ export function Navbar() {
   const { categories, products } = useMarketData();
   const pathname = usePathname();
   const tickerItems = products.slice(0, 8);
-  const date = new Intl.DateTimeFormat("bn-BD", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-    timeZone: "Asia/Dhaka",
-  }).format(new Date());
+  const [currentDate, setCurrentDate] = useState("");
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const formattedDate = new Intl.DateTimeFormat("bn-BD", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        timeZone: "Asia/Dhaka",
+      }).format(new Date());
+      setCurrentDate(formattedDate);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur">
@@ -27,9 +37,7 @@ export function Navbar() {
             <Link href="/" className="text-2xl font-black text-slate-900">
               🛒 বাজার দর
             </Link>
-            <p className="text-xs text-slate-500" suppressHydrationWarning>
-              {date}
-            </p>
+            <p className="text-xs text-slate-500">{currentDate}</p>
           </div>
 
           <div className="flex items-center gap-2">
