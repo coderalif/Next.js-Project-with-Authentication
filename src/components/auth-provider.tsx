@@ -53,7 +53,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async login(email, password) {
         try {
           const result = await authClient.signIn.email({ email, password });
-          if (result.error) return "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।";
+          if (result.error) {
+            if (result.error.status === 401) {
+              return "ইমেইল বা পাসওয়ার্ড মেলেনি। এই সাইটে অ্যাকাউন্ট তৈরি করা হয়েছে কি না যাচাই করুন।";
+            }
+
+            return `সাইন-ইন সার্ভারে সমস্যা হয়েছে (HTTP ${result.error.status})। Production database ও auth configuration যাচাই করুন।`;
+          }
 
           const verification = await authClient.getSession();
           const verifiedSession = verification.data;
@@ -70,7 +76,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       async register(name, email, password) {
         try {
           const result = await authClient.signUp.email({ name, email, password });
-          return result.error?.message ?? null;
+          if (!result.error) return null;
+          if (result.error.status >= 500) {
+            return `অ্যাকাউন্ট তৈরি সার্ভারে ব্যর্থ হয়েছে (HTTP ${result.error.status})। Production database ও auth configuration যাচাই করুন।`;
+          }
+          return result.error.message;
         } catch {
           return "রেজিস্ট্রেশন সার্ভারে সংযোগ করা যায়নি।";
         }

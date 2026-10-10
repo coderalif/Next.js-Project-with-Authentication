@@ -27,7 +27,7 @@ export default function SignUpPage() {
     const error = await register(name.trim(), email.trim(), password);
     setPending(false);
     if (error) {
-      toast.error("অ্যাকাউন্ট তৈরি করা যায়নি। ইমেইলটি আগে ব্যবহার হয়েছে কি না দেখুন।");
+      toast.error(error);
       return;
     }
 

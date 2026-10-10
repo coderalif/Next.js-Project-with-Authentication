@@ -6,6 +6,17 @@ const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
 const githubClientId = process.env.GITHUB_CLIENT_ID;
 const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+const configuredBaseURL =
+  process.env.BETTER_AUTH_URL || process.env.NEXT_PUBLIC_APP_URL;
+const configuredBaseIsLocal = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/i.test(
+  configuredBaseURL || "",
+);
+const deploymentBaseURL =
+  process.env.URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL
+    ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+    : undefined) ||
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
 const database = process.env.DATABASE_URL
   ? new Pool({ connectionString: process.env.DATABASE_URL })
   : new Database(process.env.BETTER_AUTH_DB_PATH || "./auth.sqlite");
@@ -13,8 +24,10 @@ const database = process.env.DATABASE_URL
 export const auth = betterAuth({
   appName: "বাজার দর",
   baseURL:
-    process.env.BETTER_AUTH_URL ||
-    process.env.NEXT_PUBLIC_APP_URL ||
+    (process.env.NODE_ENV === "production" && configuredBaseIsLocal
+      ? undefined
+      : configuredBaseURL) ||
+    deploymentBaseURL ||
     "http://localhost:3000",
   secret: process.env.BETTER_AUTH_SECRET,
   database,
