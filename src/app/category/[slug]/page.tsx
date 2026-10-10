@@ -2,13 +2,13 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 
 import { useMarketData } from "@/components/market-data-provider";
 import { ProductCard } from "@/components/product-card";
 import { ProductGridSkeleton } from "@/components/product-grid-skeleton";
 
-export default function CategoryPage() {
+function CategoryContent() {
   const params = useParams<{ slug: string }>();
   const slug = params?.slug ?? "";
   const { products: allProducts, categories, loading, error, refresh } = useMarketData();
@@ -106,5 +106,22 @@ export default function CategoryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+function CategoryLoadingFallback() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 py-12" role="status" aria-label="ক্যাটাগরির পণ্য লোড হচ্ছে">
+      <div className="mb-8 h-9 w-48 animate-pulse rounded bg-slate-200" />
+      <ProductGridSkeleton />
+    </div>
+  );
+}
+
+export default function CategoryPage() {
+  return (
+    <Suspense fallback={<CategoryLoadingFallback />}>
+      <CategoryContent />
+    </Suspense>
   );
 }

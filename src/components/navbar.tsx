@@ -1,4 +1,5 @@
 "use client";
+import { Suspense } from "react";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -8,7 +9,7 @@ import { useAuth } from "@/components/auth-provider";
 import { useMarketData } from "@/components/market-data-provider";
 import { formatPercent, formatPrice } from "@/data/products";
 
-export function Navbar() {
+function NavbarContent() {
   const { user, isLoggedIn, logout, loading: authLoading } = useAuth();
   const { categories, products } = useMarketData();
   const pathname = usePathname();
@@ -116,5 +117,13 @@ export function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+export function Navbar() {
+  return (
+    <Suspense fallback={<div className="px-4 py-3 text-sm text-slate-500">লোড হচ্ছে...</div>}>
+      <NavbarContent />
+    </Suspense>
   );
 }
