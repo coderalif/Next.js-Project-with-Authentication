@@ -94,8 +94,8 @@ export default function ProductDetails() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
       <nav aria-label="Breadcrumb" className="mb-5 flex flex-wrap items-center gap-2 text-sm text-slate-500">
-        <Link href="/" className="hover:text-emerald-800">???</Link><span aria-hidden="true">?</span>
-        <Link href={`/category/${product.category}`} className="hover:text-emerald-800">{product.categoryLabel}</Link><span aria-hidden="true">?</span>
+        <Link href="/" className="hover:text-emerald-800">হোম</Link><span aria-hidden="true">/</span>
+        <Link href={`/category/${product.category}`} className="hover:text-emerald-800">{product.categoryLabel}</Link><span aria-hidden="true">/</span>
         <span className="text-slate-700">{product.name}</span>
       </nav>
 
@@ -155,19 +155,19 @@ export default function ProductDetails() {
         <div className="overflow-x-auto rounded-2xl border border-[#dce7dd] bg-[#fbfdfb]">
           <table className="w-full min-w-[680px] border-collapse text-left text-sm">
             <thead className="bg-[#f0f6f0] text-slate-600"><tr>
-              <th scope="col" className="px-4 py-3 font-semibold">?????</th>
-              <th scope="col" className="px-4 py-3 font-semibold">?????</th>
-              <th scope="col" className="px-4 py-3 text-right font-semibold">?????????</th>
-              <th scope="col" className="px-4 py-3 text-right font-semibold">????????</th>
-              <th scope="col" className="px-4 py-3 text-right font-semibold">???</th>
+              <th scope="col" className="px-4 py-3 font-semibold">বাজার</th>
+              <th scope="col" className="px-4 py-3 font-semibold">বিভাগ</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">সর্বনিম্ন দাম</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">সর্বোচ্চ দাম</th>
+              <th scope="col" className="px-4 py-3 text-right font-semibold">গড় দাম</th>
             </tr></thead>
             <tbody>{product.markets.map((market) => (
               <tr key={`${market.market}-${market.division}`} className="border-t border-[#e3ebe3] odd:bg-[#fbfdfb] even:bg-[#f4f8f4]">
                 <th scope="row" className="px-4 py-3.5 font-medium text-slate-800">{market.market}</th>
                 <td className="px-4 py-3.5 text-slate-600">{market.division}</td>
-                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.min)} ????</td>
-                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.max)} ????</td>
-                <td className="px-4 py-3.5 text-right font-semibold text-slate-800">{formatPrice((market.min + market.max) / 2)} ????</td>
+                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.min)} টাকা</td>
+                <td className="px-4 py-3.5 text-right text-slate-700">{formatPrice(market.max)} টাকা</td>
+                <td className="px-4 py-3.5 text-right font-semibold text-slate-800">{formatPrice((market.min + market.max) / 2)} টাকা</td>
               </tr>
             ))}</tbody>
           </table>
