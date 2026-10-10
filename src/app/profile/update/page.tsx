@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
 
-import { useAuth } from "@/components/auth-provider";
+import { AuthSessionNotice, useAuth } from "@/components/auth-provider";
 
 export default function UpdateProfilePage() {
   const router = useRouter();
-  const { user, updateProfile, loading, isLoggedIn } = useAuth();
+  const { user, updateProfile, loading, isLoggedIn, sessionError } = useAuth();
 
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (!loading && !sessionError && !isLoggedIn) {
       toast.error("তথ্য আপডেট করতে আগে সাইন ইন করুন।");
       router.replace("/signin?returnTo=%2Fprofile%2Fupdate");
     }
-  }, [isLoggedIn, loading, router]);
+  }, [isLoggedIn, loading, router, sessionError]);
+
+  if (sessionError) return <AuthSessionNotice />;
 
   if (loading || !isLoggedIn || !user) {
     return (

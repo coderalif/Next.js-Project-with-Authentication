@@ -14,6 +14,8 @@ type AuthContextValue = {
   user: AuthUser | null;
   isLoggedIn: boolean;
   loading: boolean;
+  sessionError: string | null;
+  refreshSession: () => Promise<void>;
   login: (email: string, password: string) => Promise<string | null>;
   register: (
     name: string,
@@ -28,6 +30,8 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const session = authClient.useSession();
+  const sessionError = session.error;
+  const refetchSession = session.refetch;
   const user = useMemo(() => {
     const sessionUser = session.data?.user;
     return sessionUser
@@ -40,10 +44,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       user,
       isLoggedIn: Boolean(user),
       loading: session.isPending,
+      sessionError: sessionError
+        ? "সাইন-ইন সেশন যাচাই করা যাচ্ছে না। সার্ভার সংযোগ ও Auth configuration পরীক্ষা করুন।"
+        : null,
+      async refreshSession() {
+        await refetchSession();
+      },
       async login(email, password) {
         try {
           const result = await authClient.signIn.email({ email, password });
-          return result.error?.message ?? null;
+          if (result.error) return "ইমেইল অথবা পাসওয়ার্ড সঠিক নয়।";
+
+          const verification = await authClient.getSession();
+          const verifiedSession = verification.data;
+          if (verification.error || !verifiedSession?.user) {
+            return "সাইন-ইন হয়েছে, কিন্তু সেশন যাচাই করা যায়নি। আবার চেষ্টা করুন।";
+          }
+
+          authClient.hydrateSession(verifiedSession);
+          return null;
         } catch {
           return "সাইন ইন সার্ভারে সংযোগ করা যায়নি।";
         }
@@ -79,7 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         }
       },
     }),
-    [user, session.isPending],
+    [user, session.isPending, sessionError, refetchSession],
   );
 
   return (
@@ -102,4 +121,26 @@ export function useAuth() {
     throw new Error("useAuth must be used inside AuthProvider");
   }
   return context;
+}
+
+export function AuthSessionNotice() {
+  const { sessionError, refreshSession } = useAuth();
+  if (!sessionError) return null;
+
+  return (
+    <div
+      role="alert"
+      className="mx-auto my-10 max-w-3xl rounded-2xl border border-amber-200 bg-amber-50 p-6 text-center text-amber-950"
+    >
+      <h2 className="text-lg font-bold">সেশন যাচাই করা যায়নি</h2>
+      <p className="mt-2 text-sm">{sessionError}</p>
+      <button
+        type="button"
+        onClick={() => void refreshSession()}
+        className="mt-4 rounded-full bg-amber-800 px-5 py-2.5 text-sm font-semibold text-white hover:bg-amber-700"
+      >
+        আবার যাচাই করুন
+      </button>
+    </div>
+  );
 }

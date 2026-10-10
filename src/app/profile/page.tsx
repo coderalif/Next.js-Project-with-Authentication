@@ -5,18 +5,20 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { toast } from "react-hot-toast";
 
-import { useAuth } from "@/components/auth-provider";
+import { AuthSessionNotice, useAuth } from "@/components/auth-provider";
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, logout, isLoggedIn, loading } = useAuth();
+  const { user, logout, isLoggedIn, loading, sessionError } = useAuth();
 
   useEffect(() => {
-    if (!loading && !isLoggedIn) {
+    if (!loading && !sessionError && !isLoggedIn) {
       toast.error("প্রোফাইল দেখতে আগে সাইন ইন করুন।");
       router.replace("/signin?returnTo=%2Fprofile");
     }
-  }, [isLoggedIn, loading, router]);
+  }, [isLoggedIn, loading, router, sessionError]);
+
+  if (sessionError) return <AuthSessionNotice />;
 
   if (loading || !isLoggedIn || !user) {
     return (

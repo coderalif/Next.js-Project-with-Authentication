@@ -21,7 +21,7 @@ export default function SignInPage() {
     const error = await login(email.trim(), password);
     setPending(false);
     if (error) {
-      toast.error("ইমেল বা পাসওয়ার্ড সঠিক নয়। আবার চেষ্টা করুন।");
+      toast.error(error);
       return;
     }
 

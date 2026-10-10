@@ -5,24 +5,24 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef } from "react";
 import { toast } from "react-hot-toast";
 
-import { useAuth } from "@/components/auth-provider";
+import { AuthSessionNotice, useAuth } from "@/components/auth-provider";
 import { useMarketData } from "@/components/market-data-provider";
 import { formatPercent, formatPrice } from "@/data/products";
 
 export default function ProductDetails() {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
-  const { isLoggedIn, loading: authLoading } = useAuth();
+  const { isLoggedIn, loading: authLoading, sessionError } = useAuth();
   const { products, loading: dataLoading, error, refresh } = useMarketData();
   const notified = useRef(false);
   const product = products.find((item) => item.slug === params.slug);
 
   useEffect(() => {
-    if (authLoading || isLoggedIn || notified.current) return;
+    if (authLoading || sessionError || isLoggedIn || notified.current) return;
     notified.current = true;
     toast.error("পণ্যের বিস্তারিত দেখতে আগে সাইন ইন করুন।");
     router.replace(`/signin?returnTo=${encodeURIComponent(`/product/${params.slug}`)}`);
-  }, [authLoading, isLoggedIn, params.slug, router]);
+  }, [authLoading, isLoggedIn, params.slug, router, sessionError]);
 
   const priceSummary = useMemo(() => {
     if (!product || product.markets.length === 0) return null;
@@ -39,6 +39,8 @@ export default function ProductDetails() {
       ) / product.markets.length;
     return { min, max, average };
   }, [product]);
+
+  if (sessionError) return <AuthSessionNotice />;
 
   if (authLoading || !isLoggedIn) {
     return (
