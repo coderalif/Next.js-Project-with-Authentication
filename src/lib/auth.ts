@@ -17,9 +17,14 @@ const deploymentBaseURL =
     ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
     : undefined) ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
+
 const database = process.env.DATABASE_URL
   ? new Pool({ connectionString: process.env.DATABASE_URL })
-  : new Database(process.env.BETTER_AUTH_DB_PATH || "./auth.sqlite");
+  : process.env.NODE_ENV === "production"
+    ? (() => {
+        throw new Error("DATABASE_URL is required in production");
+      })()
+    : new Database(process.env.BETTER_AUTH_DB_PATH || "./auth.sqlite");
 
 export const auth = betterAuth({
   appName: "বাজার দর",
