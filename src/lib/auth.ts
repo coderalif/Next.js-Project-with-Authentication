@@ -1,6 +1,6 @@
 import { betterAuth } from "better-auth";
-import Database from "better-sqlite3";
-import { Pool } from "pg";
+import { mongodbAdapter } from "better-auth/adapters/mongodb";
+import { MongoClient } from "mongodb";
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -18,13 +18,29 @@ const deploymentBaseURL =
     : undefined) ||
   (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : undefined);
 
-const database = process.env.DATABASE_URL
-  ? new Pool({ connectionString: process.env.DATABASE_URL })
-  : process.env.NODE_ENV === "production"
-    ? (() => {
-        throw new Error("DATABASE_URL is required in production");
-      })()
-    : new Database(process.env.BETTER_AUTH_DB_PATH || "./auth.sqlite");
+// Vercel: Project → Settings → Environment Variables → Production-এ
+// BETTER_AUTH_URL ও NEXT_PUBLIC_APP_URL-এ live site URL দিন এবং
+// BETTER_AUTH_SECRET-এ নতুন random secret দিন। পরিবর্তনের পর redeploy করুন।
+// Secret বা database connection string কখনো source control-এ commit করবেন না।
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+  throw new Error("MONGODB_URI is required to use Better Auth.");
+}
+const authSecret = process.env.BETTER_AUTH_SECRET;
+if (!authSecret || authSecret.length < 32) {
+  throw new Error("BETTER_AUTH_SECRET must contain at least 32 characters.");
+}
+
+const globalForMongo = globalThis as typeof globalThis & {
+  mongoClient?: MongoClient;
+};
+const mongoClient =
+  globalForMongo.mongoClient ?? new MongoClient(mongoUri);
+if (process.env.NODE_ENV !== "production") {
+  globalForMongo.mongoClient = mongoClient;
+}
+
+const database = mongoClient.db(process.env.MONGODB_DB_NAME || "bazar_dor");
 
 export const auth = betterAuth({
   appName: "বাজার দর",
@@ -34,12 +50,14 @@ export const auth = betterAuth({
       : configuredBaseURL) ||
     deploymentBaseURL ||
     "http://localhost:3000",
-  secret: process.env.BETTER_AUTH_SECRET,
-  database,
+  secret: authSecret,
+  database: mongodbAdapter(database, { client: mongoClient }),
   emailAndPassword: {
     enabled: true,
     autoSignIn: false,
   },
+  // OAuth চালু করলে Google/GitHub console-এ callback URL দিন:
+  // <BETTER_AUTH_URL>/api/auth/callback/google অথবা /github।
   socialProviders: {
     ...(googleClientId && googleClientSecret
       ? {

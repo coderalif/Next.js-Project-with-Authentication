@@ -8,6 +8,7 @@ export function SocialLoginButtons() {
   const signIn = async (provider: "google" | "github") => {
     try {
       const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+      // Social callback-এও একই-site path-ই রাখি, যাতে open redirect না হয়।
       const callbackURL =
         returnTo?.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/";
       const result = await authClient.signIn.social({

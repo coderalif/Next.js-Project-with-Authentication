@@ -19,6 +19,7 @@ function subscribeToDate() {
   return () => {};
 }
 
+// Server render-এ ফাঁকা date দিয়ে hydration mismatch এড়িয়ে client date পরে দেখাই।
 function getCurrentDate() {
   return dateFormatter.format(new Date());
 }

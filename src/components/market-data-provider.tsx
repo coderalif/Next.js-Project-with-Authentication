@@ -58,6 +58,7 @@ export function MarketDataProvider({ children }: { children: ReactNode }) {
   const refresh = useCallback(() => {
     setLoading(true);
     setError(null);
+    // request বদলালে effect আবার চলে, তাই refresh একই loader ব্যবহার করে।
     setRequest((value) => value + 1);
   }, []);
 
@@ -66,6 +67,7 @@ export function MarketDataProvider({ children }: { children: ReactNode }) {
 
     loadMarketData()
       .then((data) => {
+        // Unmount বা নতুন request-এর পরে পুরনো response যেন state overwrite না করে।
         if (!active) return;
         setProducts(data.products);
         setCategories(data.categories);

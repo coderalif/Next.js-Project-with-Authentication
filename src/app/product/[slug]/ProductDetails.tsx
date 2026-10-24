@@ -19,6 +19,7 @@ export default function ProductDetails() {
 
   useEffect(() => {
     if (authLoading || sessionError || isLoggedIn || notified.current) return;
+    // Session check শেষ হওয়ার পর redirect করি এবং rerender-এ toast বারবার দেখাই না।
     notified.current = true;
     toast.error("পণ্যের বিস্তারিত দেখতে আগে সাইন ইন করুন।");
     router.replace(`/signin?returnTo=${encodeURIComponent(`/product/${params.slug}`)}`);
@@ -197,4 +198,3 @@ export default function ProductDetails() {
     </div>
   );
 }
-

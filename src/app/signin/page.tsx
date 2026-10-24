@@ -27,6 +27,7 @@ export default function SignInPage() {
 
     toast.success("সফলভাবে সাইন ইন হয়েছে।");
     const returnTo = new URLSearchParams(window.location.search).get("returnTo");
+    // শুধু একই সাইটের absolute path গ্রহণ করে external redirect আটকাই।
     router.push(returnTo?.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/");
   };
 

@@ -29,6 +29,7 @@ type AuthContextValue = {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // Better Auth-এর session hook থেকেই navbar ও protected page-এর shared auth state আসে।
   const session = authClient.useSession();
   const sessionError = session.error;
   const refetchSession = session.refetch;
@@ -61,6 +62,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             return `সাইন-ইন সার্ভারে সমস্যা হয়েছে (HTTP ${result.error.status})। Production database ও auth configuration যাচাই করুন।`;
           }
 
+          // Sign-in response সফল হলেও UI-তে logged-in দেখানোর আগে cookie session যাচাই করি।
           const verification = await authClient.getSession();
           const verifiedSession = verification.data;
           if (verification.error || !verifiedSession?.user) {
@@ -131,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (!context) {
+    // Provider-এর বাইরে hook ব্যবহার হলে ভুল auth state না দিয়ে wiring error দেখাই।
     throw new Error("useAuth must be used inside AuthProvider");
   }
   return context;

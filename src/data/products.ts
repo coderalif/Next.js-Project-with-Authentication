@@ -53,6 +53,7 @@ type ApiCategory = {
 };
 
 function getApiItems(payload: unknown, label: string): unknown[] {
+  // API array অথবা { value: [...] }—দুই response shape-ই সমর্থন করে।
   if (Array.isArray(payload)) return payload;
 
   if (
@@ -82,6 +83,7 @@ export function normalizeProducts(payload: unknown): Product[] {
       throw new Error("পণ্যের API-তে অসম্পূর্ণ তথ্য রয়েছে।");
     }
 
+    // External API data runtime-এ যাচাই করে তারপর app-এর Product shape-এ রূপান্তর করি।
     const item = entry as ApiProduct;
     if (
       typeof item.id !== "number" ||
